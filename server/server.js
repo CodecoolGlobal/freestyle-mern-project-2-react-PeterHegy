@@ -12,7 +12,7 @@ app.use(cors())
 app.listen(3000, () => console.log('Server started on port 3000'));
 
 
-app.post('/activity',  (req, res) => {
+app.post('/api/activity',  (req, res) => {
     console.log(req.body)
     const activity = req.body.activity
     const accessibility = req.body.accessibility
@@ -35,7 +35,7 @@ app.post('/activity',  (req, res) => {
     res.send('SIKER')
 })
 
-app.get('/favourites', async (req, res) => {
+app.get('/api/favourites', async (req, res) => {
 try {
     const favourites =  await Activity.find({})
     console.log(favourites)
@@ -45,7 +45,7 @@ try {
 }
 })
 
-app.delete('/favourites/:id', async (req, res) => {
+app.delete('/api/favourites/:id', async (req, res) => {
     const delKey = req.params.id
     console.log(delKey)
     try {
@@ -56,19 +56,19 @@ app.delete('/favourites/:id', async (req, res) => {
     }
 })
 
-app.post('/edit', async (req, res) => {
+app.post('/api/edit', async (req, res, next) => {
     const data = req.body
-try {
-    const modifyActivity =  await Activity.findOne({ key : data.key})
-    modifyActivity.activity = data.activity
-    modifyActivity.accessibility = data.accessibility
-    modifyActivity.type = data.type
-    modifyActivity.participants = data.participants
-    modifyActivity.price = data.price
-    return modifyActivity.save()
-} catch (error) {
-    console.error(error)
-}
-    
-})
+    try {
+        const modifyActivity = await Activity.findOne({ key : data.key})
+        modifyActivity.activity = data.activity
+        modifyActivity.accessibility = data.accessibility
+        modifyActivity.type = data.type
+        modifyActivity.participants = data.participants
+        modifyActivity.price = data.price
+        await modifyActivity.save();
+        return res.sendStatus(200);
+    } catch (error) {
+        return next(error);
+    }
+});
 

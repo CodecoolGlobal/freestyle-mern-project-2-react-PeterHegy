@@ -7,7 +7,7 @@ function FinalPage({ availableBudget, onTakeMeBack }) {
 
     useEffect(() => {
         async function getFinalList() {
-            const response = await fetch('http://localhost:3000/favourites')
+            const response = await fetch('/api/favourites')
             const allActivities = await response.json();
             setActivities(allActivities);
         }

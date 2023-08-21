@@ -10,7 +10,7 @@ function ListActivities({ choosedType, availableBudget, minimum, maximum, budget
   async function PushActivityToDataBase(obj) {
     console.log(obj)
     try {
-      const response = await fetch('http://localhost:3000/activity', {
+      const response = await fetch('/api/activity', {
         method: 'POST',
         headers: {
           'content-type': 'application/json'
@@ -25,8 +25,6 @@ function ListActivities({ choosedType, availableBudget, minimum, maximum, budget
 
     budget(availableBudget, (obj.price * 200), true)
   }
-
-
 
   useEffect(() => {
     async function getActivities() {
@@ -48,10 +46,9 @@ function ListActivities({ choosedType, availableBudget, minimum, maximum, budget
 
       const uniqueArray = Array.from(uniqueMap.values())
       setActivities(uniqueArray)
-
     }
     getActivities()
-  }, [])
+  }, [choosedType, minimum, maximum])
 
 
   return (

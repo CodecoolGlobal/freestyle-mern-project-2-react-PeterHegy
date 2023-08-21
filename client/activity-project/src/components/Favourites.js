@@ -6,7 +6,7 @@ function ShowFavourites({OnClickEdit, OnclickBack, onShowFinal, availableBudget,
 
     useEffect(() => {
         async function fetchFavourites() {
-            const response = await fetch('http://localhost:3000/favourites')
+            const response = await fetch('/api/favourites')
             const data = await response.json()
             console.log(data)
             setFavActivities(data)
@@ -23,7 +23,7 @@ function ShowFavourites({OnClickEdit, OnclickBack, onShowFinal, availableBudget,
         setFavActivities(filteredList)
         setHaschanges('mertAztSzeretem')
 
-        fetch(`http://localhost:3000/favourites/${del}`, {
+        fetch(`/api/favourites/${del}`, {
             method: 'DELETE',
         })
 

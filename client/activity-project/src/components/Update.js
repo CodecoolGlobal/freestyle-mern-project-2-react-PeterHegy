@@ -14,15 +14,18 @@ function EditNeedToChange({ NeedToChange , OnTakeBack,  availableBudget,  budget
 
 
     function handleEvent(e) {
+        let value = e.target.value;
+        if (e.target.name == 'price') {
+            value /= 200;
+        }
         setUpdatedAct({
             ...updatedAct,
-            [e.target.name] : e.target.value
+            [e.target.name]: value
         })
     }
-
   
       async  function updateActivity (activity) {
-         await   fetch('http://localhost:3000/edit', {
+         await   fetch('/api/edit', {
                 method: 'POST',
                 headers : {
                     'content-type' : 'application/json'
@@ -38,12 +41,16 @@ function EditNeedToChange({ NeedToChange , OnTakeBack,  availableBudget,  budget
     return (
         <div>
             <p>Available budget: {availableBudget}</p>
-            {actKeys.map(act => (
-                <div key={act}>
+            {actKeys.map(act => {
+                let defaultValue = NeedToChange[act];
+                if (act === 'price') {
+                    defaultValue *= 200;
+                } 
+                return <div key={act}>
                     <label>{act}: </label>
-                    <input name={act} onChange={(e) => { handleEvent(e) }} defaultValue={NeedToChange[act]} id={act} />
+                    <input name={act} onChange={(e) => { handleEvent(e) }} defaultValue={defaultValue} id={act} />
                 </div>
-            ))}
+            })}
             <button onClick={() => {updateActivity(updatedAct);
            if ((updatedAct.price * 200) > oldCost) { budget(availableBudget, updatedAct.price * 200, false); setOldCost(updatedAct.price * 200)} else {budget(availableBudget, updatedAct.price * 200, true) ; setOldCost(updatedAct.price * 200)} }}>Save</button>
             <button onClick={() => {OnTakeBack('Favourites')}}>Back</button>
